@@ -1,0 +1,82 @@
+import java.util.Scanner;
+
+/*
+  problem statement: 
+  
+    There are N houses in a village such that if forms a circumference of circle. There is a need to collect maximum amount from as many
+    houses as possible in this village for construction of a building at the center of the circle(village).
+    The criteria to collect amount;
+    1. Villagers are egoistic, they will be paying the amount only if their immediate neighbor hasn't paid.
+      (Basically adjacent houses money can't be counted)
+    2. Every house will display the amount the have on the board outside the house.
+
+Solution:
+  This can solved with Time Complexity: O(n)
+  Iterate through an array which contains the value/amount a house in that village will pay.
+  1. Start iteration from 3rd element.
+  2. Add the current house value[i] with i-2 the house, store sum in ith value[In first instance add 1st and 3rd house value].
+  3. compare the sum from step 1 to i+1th house value[In first instance compare sum[1st + 3rd] with 2nd house value].
+  4. take max out of the step 3rd comparison and return it..
+  5. continue again from step 2 for all the houses. Final value returned from step 4 will be the maximum amount collected.
+*/
+
+public class FindMaxSum {
+
+	public static void main(String[] args) {
+
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Enter the number of houses :  \n");
+		int houses = scan.nextInt();
+		
+		// this variable will store the amount each house is ready to pay
+		int[] valueOfHouse = new int[houses];
+		
+		System.out.println("Enter the amount in each house : ");
+		
+		for (int i = 0; i < houses; i++) {
+			valueOfHouse[i] = scan.nextInt();
+		}
+
+		int maximumAmount = maximizeAmountCollection(valueOfHouse, houses);
+		
+		System.out.println("maximum amount collected is : " +maximumAmount);
+		
+		scan.close();
+
+	}
+
+	/**
+	 * 
+	 * Method to maximize the amount collection
+	 * 
+	 * @param valueOfHouse
+	 */
+
+	private static int maximizeAmountCollection(int[] valueOfHouse, int houses) {
+
+		if (houses == 1) {
+
+			return valueOfHouse[0];
+
+		} else if (houses == 2) {
+
+			return Math.max(valueOfHouse[0], valueOfHouse[1]);
+
+		}
+		// a temp array to store sum of alternate house values for comparison purpose
+		int[] maxAmtCollected = new int[valueOfHouse.length];
+		maxAmtCollected[0] = valueOfHouse[0];
+
+		maxAmtCollected[1] = valueOfHouse[1];
+		//start iterating from 3rd element in array
+		for (int i = 2; i < houses; i++) {
+
+			maxAmtCollected[i] = Math.max(maxAmtCollected[i - 2] + valueOfHouse[i], maxAmtCollected[i - 1]);
+
+	}
+
+	return maxAmtCollected[houses - 1];
+
+	}
+
+}
